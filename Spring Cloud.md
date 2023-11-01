@@ -1863,3 +1863,145 @@ GET /test2/_search
 ![image-20230919234331015](https://cdn.jsdelivr.net/gh/yzk656/image/img/202309192343113.png)
 
 ![image-20230919235302996](https://cdn.jsdelivr.net/gh/yzk656/image/img/202309192353098.png)
+
+windows启动nacos
+
+启动命令(standalone代表着单机模式运行，非集群模式):
+
+```
+startup.cmd -m standalone
+```
+
+## 限流规则
+
+### 快速入门
+
+![image-20231008094550796](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310080945909.png)
+
+![image-20231008094840688](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310080948772.png)
+
+![image-20231008094857205](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310080948279.png)
+
+![image-20231008094953451](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310080949517.png)
+
+![image-20231008095905588](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310080959677.png)
+
+### 流控模式之关联模式
+
+![image-20231008100009448](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310081000532.png)
+
+![image-20231008100147818](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310081001901.png)
+
+![image-20231008110102579](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310081101653.png)
+
+![image-20231008110756402](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310081107473.png)
+
+### 流控模式-链路
+
+![image-20231008220154858](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082201973.png)
+
+![image-20231008220201150](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082202226.png)
+
+![image-20231008223717471](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082237563.png)
+
+### 流控效果
+
+![image-20231008223947109](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082239190.png)
+
+![image-20231008224306396](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082243482.png)
+
+![image-20231008224759257](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082247340.png)
+
+![image-20231008224822935](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082248988.png)
+
+![image-20231008225730521](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082257597.png)
+
+### 热点参数限流
+
+![image-20231008225831133](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082258182.png)
+
+![image-20231008230010919](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082300994.png)
+
+![image-20231008230030287](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082300358.png)
+
+![image-20231008230114609](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082301662.png)
+
+![image-20231008230145111](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082301165.png)
+
+## 隔离和降级
+
+### Feign整合Sentinel
+
+![image-20231008235435931](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082354011.png)
+
+![image-20231008235545720](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082355774.png)
+
+![image-20231008235702533](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082357595.png)
+
+![image-20231008235749514](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310082357578.png)
+
+![image-20231009000643784](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310090006841.png)
+
+### 线程隔离
+
+![image-20231009105134594](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310091051686.png)
+
+![image-20231009105833345](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310091058401.png)
+
+![image-20231009110944921](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310091109995.png)
+
+![image-20231009105842422](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310091058463.png)
+
+![image-20231009110553543](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310091105596.png)
+
+### 熔断降级
+
+![image-20231009111243137](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310091112196.png)
+
+### 熔断策略
+
+![image-20231017203945622](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172039708.png)
+
+![](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172041512.png)
+
+![image-20231017210455220](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172104296.png)
+
+![image-20231017210541093](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172105178.png)
+
+## 授权规则
+
+### 实现网关授权
+
+![](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172155551.png)
+
+![image-20231017220102886](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172201296.png)
+
+![](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172203929.png)
+
+### 自定义异常结果
+
+![image-20231017222036420](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172220483.png)
+
+![image-20231017222025995](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172220059.png)
+
+![image-20231017222118903](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172221975.png)
+
+![image-20231017223029875](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172230924.png)
+
+## 规则持久化
+
+因为sentinel默认是将规则保存在内存中，重启服务后规则就会消失
+
+### 规则管理三种模式
+
+![image-20231017223331763](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172233805.png)
+
+![image-20231017223514457](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172235510.png)
+
+![image-20231017223548640](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172235699.png)
+
+![image-20231017223606562](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172236618.png)
+
+### 实现push模式持久化
+
+![image-20231017223637440](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172236493.png)

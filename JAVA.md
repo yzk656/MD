@@ -8943,3 +8943,42 @@ CS、BS
 
 ## 学习
 
+# 枚举
+
+![image-20231003134748836](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031347997.png)
+
+![image-20231003134848998](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031348125.png)
+
+两者区别
+
+![image-20231003135244724](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031352861.png)
+
+![image-20231003152719908](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031527142.png)
+
+![image-20231003153006058](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031530121.png)
+
+![image-20231003153014615](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031530674.png)
+
+![image-20231003153242509](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031532582.png)
+
+![image-20231003155714921](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310031557053.png)
+
+对于dto放的是post请求参数对应的属性
+
+po是对应表的属性
+
+query是对应的get请求的属性
+
+vo是返回给前端的属性
+
+> 主键生成策略
+
+![image-20231003205638829](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310032056044.png)
+
+![image-20231003210149184](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310032101272.png)
+
+> 建议使用jackJson
+
+![image-20231003211026812](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310032110945.png)
+
+![image-20231003211139666](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310032111744.png)
