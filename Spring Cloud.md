@@ -351,6 +351,64 @@
 
 ![image-20230702142039515](https://cdn.jsdelivr.net/gh/yzk656/image/202307021420618.png)
 
+```java
+upstream  heima-admin-gateway{
+    server localhost:6001;
+}
+
+server {
+	listen 8803;
+	location / {
+		root E:\Code\springcloud_heima\admin-web;
+		index index.html;
+	}
+	
+	location ~/service_6001/admin/(.*) {
+		proxy_pass http://heima-admin-gateway/$1;
+		proxy_set_header HOST $host;  # 不改变源请求头的值
+		proxy_pass_request_body on;  #开启获取请求体
+		proxy_pass_request_headers on;  #开启获取请求头
+		proxy_set_header X-Real-IP $remote_addr;   # 记录真实发出请求的客户端IP
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  #记录代理信息
+	}
+}
+解释一下这段代码
+```
+
+这段Nginx配置用于设置反向代理，将特定位置的请求转发到后端服务器。让我们逐段解释这个配置：
+
+1. **上游服务器块:**
+   ```nginx
+   upstream heima-admin-gateway {
+       server localhost:6001;
+   }
+   ```
+   这个块定义了一个名为`heima-admin-gateway`的上游服务器组，其中包含一个在`localhost`上运行的服务器，端口为`6001`。`upstream`指令用于定义一组服务器，以便后续在配置中引用。
+
+2. **服务器块:**
+   ```nginx
+   server {
+       listen 8803;
+       location / {
+           root E:\Code\springcloud_heima\admin-web;
+           index index.html;
+       }
+   ```
+   这个服务器块监听端口`8803`。当请求到达时，它会从指定的根目录（`E:\Code\springcloud_heima\admin-web`）提供静态文件，并将默认文件设置为`index.html`。
+
+3. **用于代理的位置块:**
+   ```nginx
+   location ~/service_6001/admin/(.*) {
+       proxy_pass http://heima-admin-gateway/$1;
+       proxy_set_header HOST $host;
+       proxy_pass_request_body on;
+       proxy_pass_request_headers on;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+   }
+   ```
+   这个位置块匹配以`/service_6001/admin/`开头的请求路径。匹配的请求将被转发到之前定义的`heima-admin-gateway`上游服务器组。配置还设置了一些代理相关的头信息，例如保留原始请求头（`proxy_set_header HOST $host;`），记录客户端真实IP地址（`proxy_set_header X-Real-IP $remote_addr;`），记录代理信息（`proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`）。
+
 ### 路由断言工厂
 
 ![image-20230702142135438](https://cdn.jsdelivr.net/gh/yzk656/image/202307021421510.png)
@@ -1047,6 +1105,8 @@ sudo docker run -itd --rm --network host --name stormbreaker nginx
 ![](https://cdn.jsdelivr.net/gh/yzk656/image/202307221122122.png)
 
 ![image-20230722112321372](https://cdn.jsdelivr.net/gh/yzk656/image/202307221123442.png)
+
+![image-20231123134408823](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311231344914.png)
 
 ![image-20230722113026553](https://cdn.jsdelivr.net/gh/yzk656/image/202307221130618.png)
 
@@ -2005,3 +2065,263 @@ startup.cmd -m standalone
 ### 实现push模式持久化
 
 ![image-20231017223637440](https://cdn.jsdelivr.net/gh/yzk656/image/img/202310172236493.png)
+
+```js
+feign:
+  # 开启feign对hystrix熔断降级的支持
+  hystrix:
+    enabled: true
+  # 修改调用超时时间
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 2000
+```
+
+这段代码看起来是配置文件中的一部分，可能是用于配置Spring Cloud Feign客户端的一些属性。让我为您解释其中的内容：
+
+1. `feign:`：这是一个配置的起始点，表示以下的配置属性将应用于Feign客户端。
+
+2. `hystrix:`：在这里，开启了Feign对Hystrix熔断降级的支持。Hystrix是一种用于处理分布式系统中的故障和延迟的库，可以通过配置来开启或关闭Feign客户端的Hystrix支持。
+
+   - `enabled: true`：表示启用Feign的Hystrix支持，这意味着当调用出现故障时，Hystrix将会触发熔断和降级机制，以避免系统崩溃或出现雪崩效应。
+
+3. `client:`：这一部分配置将应用于Feign客户端的特定属性。
+
+   - `config:`：这是Feign客户端的配置属性。
+
+     - `default:`：表示这些配置属性将应用于所有的Feign客户端，除非为特定的客户端进行了更具体的配置。
+
+       - `connectTimeout: 2000`：设置连接超时时间为2000毫秒（2秒）。这是指在尝试与目标服务建立连接时允许的最大等待时间。
+
+       - `readTimeout: 2000`：设置读取超时时间为2000毫秒（2秒）。这是指在与目标服务建立连接后，接收响应数据的最大等待时间。
+
+总的来说，这段配置用于定义Feign客户端的一些属性，包括是否启用Hystrix熔断降级支持以及连接和读取超时时间的设置。这些属性可以根据项目的需求进行调整和配置。
+
+### 发布文章异步调用审核文章
+
+![image-20231107223254323](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311072232518.png)
+
+![image-20231107223307992](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311072233051.png)
+
+# Seata
+
+![image-20231109125154724](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311091251991.png)
+
+![image-20231109161856488](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311091618668.png)
+
+![image-20231109161903617](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311091619686.png)
+
+## 事务基础
+
+![image-20231109171844756](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311091718923.png)
+
+![image-20231109175931191](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311091759304.png)
+
+![image-20231109180413118](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311091804165.png)
+
+## 跨库事务
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699534248447-afb1742a-e608-4fad-bc74-564e62b2570a.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536035681-b0e17689-ac90-489a-a53a-5576a8ad3b59.png)
+
+## 分布式CAP理论
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536095471-a7e1e6a5-9073-48da-afe8-c7673f359879.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536540791-0509d6e8-275d-4054-a277-dbc9c517d504.png)
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536733386-e691b04c-c1d9-41e9-9d26-c45797bba450.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536794761-f683923f-c754-4946-b95e-d071c063b321.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536881337-0c8e95d1-69f0-44ef-8dec-05fce9e185d4.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536966636-a3387c54-a101-4d90-867b-9b2c3a4a7966.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699536986090-a1fc294f-5b1d-40cd-b5af-14f63232451e.png)
+
+Nacos支持CP+AP模式，即**Nacos可以根据配置识别为CP模式或AP模式，默认是AP模式**。
+
+## 分布式Base理论
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699537247735-bfaeef22-d5b9-4274-94eb-93413dcccaf8.png)
+
+![img](https://cdn.nlark.com/yuque/0/2023/png/29295087/1699547868814-a82abcd4-a50b-485e-929e-ece0b4e0dadf.png)
+
+## 分布式事务常用解决方案
+
+![image-20231111183542624](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311111835914.png)
+
+![image-20231111183751168](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311111837223.png)
+
+## 方案1-2PC
+
+![image-20231111183907501](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311111839587.png)
+
+![image-20231111214341452](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112143639.png)
+
+![image-20231111214357740](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112143793.png)
+
+![image-20231111214444924](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112144028.png)
+
+![image-20231111214900789](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112149878.png)
+
+![image-20231111215050245](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112150413.png)
+
+## 方法2-3PC
+
+![image-20231111222138751](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112221804.png)
+
+![image-20231111222218577](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311112222660.png)
+
+![image-20231112152057040](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121520203.png)
+
+![image-20231112152150006](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121521107.png)
+
+![image-20231112152239352](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121522459.png)
+
+![image-20231112152252668](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121522728.png)
+
+## 方案3-TCC
+
+![image-20231112152611924](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121526033.png)
+
+![image-20231112153130286](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121531372.png)
+
+![image-20231112155954028](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121559143.png)
+
+![image-20231112160051143](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121600233.png)
+
+![image-20231112160106393](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121601498.png)
+
+![image-20231112160137219](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121601286.png)
+
+## 方案4-SAGA
+
+![image-20231112183356818](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121833940.png)
+
+![image-20231112183816811](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121838889.png)
+
+![image-20231112184134246](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311121841355.png)
+
+![image-20231112202100084](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122021135.png)
+
+![image-20231112202135757](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122021875.png)
+
+![image-20231112202152874](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122021961.png)
+
+![image-20231112202141683](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122021759.png)
+
+![image-20231112202241201](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122022280.png)
+
+![image-20231112203957362](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122039411.png)
+
+## 方案5-本地消息表
+
+![image-20231112204317371](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122043482.png)
+
+![image-20231112211247348](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122112435.png)
+
+## 方案6-MQ消息事务
+
+![image-20231112211925895](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122119992.png)
+
+![image-20231112211629759](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122116826.png)
+
+![image-20231112212018127](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122120210.png)
+
+## 方案7-最大努力通知
+
+![image-20231112212447341](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122124459.png)
+
+## 方案选择
+
+![image-20231112212609160](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122126258.png)
+
+## 分布式最佳实践-Seata
+
+![image-20231112213135685](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122131792.png)
+
+![image-20231112213446810](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122134992.png)
+
+![image-20231112213514887](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122135948.png)
+
+![image-20231112213559579](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122135706.png)
+
+## Seata配置
+
+![image-20231112213641153](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311122136255.png)
+
+## Seata模式使用
+
+![image-20231113131219212](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131312356.png)
+
+![image-20231113131248819](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131312952.png)
+
+![image-20231113131417270](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131314391.png)
+
+![image-20231113131954470](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131319534.png)
+
+![image-20231113134312889](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131343992.png)
+
+## AT模式
+
+![image-20231113183601596](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131836446.png)
+
+![](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131836689.png)
+
+![image-20231113183703998](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311131837173.png)
+
+![image-20231113202442525](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311132024584.png)
+
+![image-20231113202557481](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311132025585.png)
+
+![image-20231113202605502](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311132026602.png)
+
+![image-20231113203547379](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311132035529.png)
+
+![image-20231113203936369](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311132039497.png)
+
+![image-20231113221003788](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311132210900.png)
+
+## TCC模式
+
+![image-20231114001117751](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311140011954.png)
+
+![image-20231114001224918](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311140012055.png)
+
+![image-20231114001400174](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311140014276.png)
+
+![image-20231114002451892](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311140024031.png)
+
+![image-20231114012406185](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311140124375.png)
+
+![image-20231114162259251](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311141622418.png)
+
+![image-20231114171733214](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311141717412.png)
+
+![image-20231114202424630](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311142024783.png)
+
+## SAGA模式
+
+![image-20231114202508747](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311142025808.png)
+
+![image-20231114202514423](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311142025525.png)
+
+# Mongodb
+
+## 什么是mongodb
+
+![image-20231124110942015](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311241109168.png)
+
+![](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311241128129.png)
+
+![image-20231124112951885](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311241129964.png)
+
+![image-20231124113308333](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311241133410.png)
+
+![image-20231124113456078](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311241134143.png)
+
+![image-20231124113815104](https://cdn.jsdelivr.net/gh/yzk656/image/img/202311241138151.png)
